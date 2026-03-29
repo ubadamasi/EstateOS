@@ -1,0 +1,264 @@
+// EstateOS — Prisma Schema
+// Currency: ALL monetary values stored as kobo (integers). ₦1 = 100 kobo. Never use Float.
+// Expenses: INSERT-ONLY. No updates or deletes. Corrections via negative-amount rows.
+// Multi-tenancy: enforced via PostgreSQL RLS. estateId is the RLS context variable.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────────────────
+
+enum UserRole {
+  PLATFORM_ADMIN
+  ESTATE_MANAGER
+  RESIDENT
+}
+
+enum ResidentType {
+  LANDLORD
+  TENANT
+}
+
+enum EstateStatus {
+  PENDING_REVIEW
+  ACTIVE
+  SUSPENDED
+}
+
+enum LevyStatus {
+  DRAFT
+  ACTIVE
+  CLOSED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PENDING_REVIEW
+  PAID
+  DISPUTED
+}
+
+enum ExpenseCategory {
+  SECURITY
+  MAINTENANCE
+  UTILITIES
+  ADMINISTRATION
+  OTHER
+}
+
+enum DisputeStatus {
+  OPEN
+  RESOLVED
+  ESCALATED
+}
+
+// ─────────────────────────────────────────────────────────
+// NEXTAUTH REQUIRED MODELS
+// ─────────────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─────────────────────────────────────────────────────────
+// USERS
+// ─────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  phone         String?
+  role          UserRole  @default(RESIDENT)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  estateManager EstateManager?
+  residents     Resident[]
+}
+
+// ─────────────────────────────────────────────────────────
+// ESTATES
+// ─────────────────────────────────────────────────────────
+
+model Estate {
+  id          String       @id @default(cuid())
+  name        String
+  address     String
+  city        String
+  state       String       @default("Lagos")
+  unitCount   Int
+  status      EstateStatus @default(PENDING_REVIEW)
+  publicToken String       @unique @default(cuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  managers    EstateManager[]
+  residents   Resident[]
+  levies      Levy[]
+  expenses    Expense[]
+}
+
+model EstateManager {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  estateId  String
+  title     String   @default("Chairman")
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  estate Estate @relation(fields: [estateId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────────────────────────────────────
+// RESIDENTS
+// ─────────────────────────────────────────────────────────
+
+model Resident {
+  id        String       @id @default(cuid())
+  estateId  String
+  userId    String?
+  unitId    String
+  name      String
+  email     String?
+  phone     String
+  type      ResidentType @default(TENANT)
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  estate   Estate    @relation(fields: [estateId], references: [id], onDelete: Cascade)
+  user     User?     @relation(fields: [userId], references: [id])
+  payments Payment[]
+  disputes Dispute[]
+
+  @@unique([estateId, unitId])
+  @@unique([estateId, phone])
+}
+
+// ─────────────────────────────────────────────────────────
+// LEVIES
+// ─────────────────────────────────────────────────────────
+
+model Levy {
+  id          String     @id @default(cuid())
+  estateId    String
+  name        String
+  description String?
+  amountKobo  Int
+  dueDate     DateTime
+  status      LevyStatus @default(DRAFT)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  estate   Estate    @relation(fields: [estateId], references: [id], onDelete: Cascade)
+  payments Payment[]
+}
+
+// ─────────────────────────────────────────────────────────
+// PAYMENTS
+// ─────────────────────────────────────────────────────────
+
+model Payment {
+  id                String        @id @default(cuid())
+  estateId          String
+  levyId            String
+  residentId        String
+  amountKobo        Int
+  status            PaymentStatus @default(UNPAID)
+  receiptPath       String?
+  receiptUploadedAt DateTime?
+  paystackRef       String?       @unique
+  paidAt            DateTime?
+  reviewedAt        DateTime?
+  reviewNote        String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  levy     Levy     @relation(fields: [levyId], references: [id])
+  resident Resident @relation(fields: [residentId], references: [id])
+  dispute  Dispute?
+
+  @@unique([levyId, residentId])
+}
+
+// ─────────────────────────────────────────────────────────
+// EXPENSES — INSERT-ONLY. Never update or delete.
+// ─────────────────────────────────────────────────────────
+
+model Expense {
+  id             String          @id @default(cuid())
+  estateId       String
+  category       ExpenseCategory
+  description    String
+  amountKobo     Int
+  expenseDate    DateTime
+  receiptPath    String?
+  correctionNote String?
+  postedAt       DateTime        @default(now())
+
+  estate Estate @relation(fields: [estateId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────────────────────────────────────
+// DISPUTES
+// ─────────────────────────────────────────────────────────
+
+model Dispute {
+  id          String        @id @default(cuid())
+  estateId    String
+  paymentId   String        @unique
+  residentId  String
+  description String
+  proofPath   String?
+  status      DisputeStatus @default(OPEN)
+  resolution  String?
+  createdAt   DateTime      @default(now())
+  resolvedAt  DateTime?
+
+  payment  Payment  @relation(fields: [paymentId], references: [id])
+  resident Resident @relation(fields: [residentId], references: [id])
+}

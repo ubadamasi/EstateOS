@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/ubadamasi/documents/project/2026/dan/src/app/public/[token])",
+      "Bash(mkdir -p /Users/ubadamasi/documents/project/2026/dan/src/app/api/auth/[...nextauth])"
+    ]
+  }
+}
