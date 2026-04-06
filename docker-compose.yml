@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: estateos-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: estateos
+      POSTGRES_PASSWORD: estateos_dev
+      POSTGRES_DB: estateos
+    ports:
+      - "5432:5432"
+    volumes:
+      - estateos_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U estateos -d estateos"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  estateos_pgdata:
+    driver: local
