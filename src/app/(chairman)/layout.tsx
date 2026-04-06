@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
+import { getPrismaForEstate } from "@/lib/prisma";
 import { ChairmanNav } from "@/components/chairman/ChairmanNav";
 
 export default async function ChairmanLayout({
@@ -12,11 +13,18 @@ export default async function ChairmanLayout({
 
   if (!session) redirect("/login");
   if (session.user.role !== "ESTATE_MANAGER") redirect("/");
+  if (!session.user.estateId) redirect("/login");
+
+  const db = getPrismaForEstate(session.user.estateId);
+  const estate = await db.estate.findUnique({
+    where: { id: session.user.estateId },
+    select: { name: true },
+  });
 
   return (
     <div className="flex flex-col min-h-full">
       <ChairmanNav
-        estateName="Loading..."
+        estateName={estate?.name ?? "EstateOS"}
         userInitials={
           session.user.name
             ? session.user.name

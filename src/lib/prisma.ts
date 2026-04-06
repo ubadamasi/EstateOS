@@ -4,14 +4,9 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-const basePrisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn"]
-        : ["error"],
-  });
+// Prisma 7: construct without options — connection URL comes from prisma.config.ts
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const basePrisma = globalForPrisma.prisma ?? new PrismaClient({} as any);
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = basePrisma;
 
