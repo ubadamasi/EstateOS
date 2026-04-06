@@ -4,12 +4,12 @@
 // Multi-tenancy: enforced via PostgreSQL RLS. estateId is the RLS context variable.
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ─────────────────────────────────────────────────────────
@@ -118,6 +118,7 @@ model User {
   sessions      Session[]
   estateManager EstateManager?
   residents     Resident[]
+  uploadedFiles StoredFile[]
 }
 
 // ─────────────────────────────────────────────────────────
@@ -199,6 +200,27 @@ model Levy {
 }
 
 // ─────────────────────────────────────────────────────────
+// FILE STORAGE — stored as bytea in PostgreSQL
+// Keeps all data in one place. No external storage dependency.
+// Files are served via GET /api/files/[id] with auth checks.
+// ─────────────────────────────────────────────────────────
+
+model StoredFile {
+  id           String   @id @default(cuid())
+  fileName     String
+  mimeType     String
+  sizeBytes    Int
+  data         Bytes    // bytea — actual file content
+  uploadedById String
+  uploadedAt   DateTime @default(now())
+
+  uploadedBy     User     @relation(fields: [uploadedById], references: [id])
+  paymentReceipt Payment? @relation("PaymentReceipt")
+  expenseReceipt Expense? @relation("ExpenseReceipt")
+  disputeProof   Dispute? @relation("DisputeProof")
+}
+
+// ─────────────────────────────────────────────────────────
 // PAYMENTS
 // ─────────────────────────────────────────────────────────
 
@@ -209,7 +231,7 @@ model Payment {
   residentId        String
   amountKobo        Int
   status            PaymentStatus @default(UNPAID)
-  receiptPath       String?
+  receiptFileId     String?       @unique
   receiptUploadedAt DateTime?
   paystackRef       String?       @unique
   paidAt            DateTime?
@@ -218,9 +240,10 @@ model Payment {
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
 
-  levy     Levy     @relation(fields: [levyId], references: [id])
-  resident Resident @relation(fields: [residentId], references: [id])
-  dispute  Dispute?
+  levy        Levy        @relation(fields: [levyId], references: [id])
+  resident    Resident    @relation(fields: [residentId], references: [id])
+  receiptFile StoredFile? @relation("PaymentReceipt", fields: [receiptFileId], references: [id])
+  dispute     Dispute?
 
   @@unique([levyId, residentId])
 }
@@ -236,11 +259,12 @@ model Expense {
   description    String
   amountKobo     Int
   expenseDate    DateTime
-  receiptPath    String?
+  receiptFileId  String?         @unique
   correctionNote String?
   postedAt       DateTime        @default(now())
 
-  estate Estate @relation(fields: [estateId], references: [id], onDelete: Cascade)
+  estate      Estate     @relation(fields: [estateId], references: [id], onDelete: Cascade)
+  receiptFile StoredFile? @relation("ExpenseReceipt", fields: [receiptFileId], references: [id])
 }
 
 // ─────────────────────────────────────────────────────────
@@ -248,17 +272,18 @@ model Expense {
 // ─────────────────────────────────────────────────────────
 
 model Dispute {
-  id          String        @id @default(cuid())
-  estateId    String
-  paymentId   String        @unique
-  residentId  String
-  description String
-  proofPath   String?
-  status      DisputeStatus @default(OPEN)
-  resolution  String?
-  createdAt   DateTime      @default(now())
-  resolvedAt  DateTime?
+  id           String        @id @default(cuid())
+  estateId     String
+  paymentId    String        @unique
+  residentId   String
+  description  String
+  proofFileId  String?       @unique
+  status       DisputeStatus @default(OPEN)
+  resolution   String?
+  createdAt    DateTime      @default(now())
+  resolvedAt   DateTime?
 
-  payment  Payment  @relation(fields: [paymentId], references: [id])
-  resident Resident @relation(fields: [residentId], references: [id])
+  payment   Payment    @relation(fields: [paymentId], references: [id])
+  resident  Resident   @relation(fields: [residentId], references: [id])
+  proofFile StoredFile? @relation("DisputeProof", fields: [proofFileId], references: [id])
 }

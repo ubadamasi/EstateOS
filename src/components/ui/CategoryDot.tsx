@@ -1,4 +1,4 @@
-import { ExpenseCategory } from "@prisma/client";
+import { ExpenseCategory } from "@/generated/prisma";
 
 const colors: Record<ExpenseCategory, string> = {
   SECURITY: "#3b82f6",

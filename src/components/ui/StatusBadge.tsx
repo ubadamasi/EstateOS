@@ -1,4 +1,4 @@
-import { PaymentStatus } from "@prisma/client";
+import { PaymentStatus } from "@/generated/prisma";
 
 const config: Record<
   PaymentStatus | "overdue",

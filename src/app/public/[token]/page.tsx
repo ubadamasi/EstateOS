@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { CategoryDot, categoryLabels } from "@/components/ui/CategoryDot";
 import { formatNaira } from "@/lib/format";
-import { ExpenseCategory } from "@prisma/client";
+import { ExpenseCategory } from "@/generated/prisma";
 
 // Live data, refreshed every 60 seconds at the edge
 export const revalidate = 60;
