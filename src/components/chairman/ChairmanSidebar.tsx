@@ -98,11 +98,6 @@ export function ChairmanSidebar({ role }: { role: string }) {
 
       <nav className="flex-1 py-4 px-3 space-y-0.5">
         {nav.map(({ href, label, icon }) => {
-          const active =
-            pathname === href ||
-            (href !== "/dashboard" && href !== "/admin/dashboard" &&
-              pathname.startsWith(href + "/")) ||
-            pathname === href;
           const isActive =
             pathname === href ||
             (pathname.startsWith(href) && href.length > 1);

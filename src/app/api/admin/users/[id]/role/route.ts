@@ -43,5 +43,10 @@ export async function PATCH(
     data: { role: parsed.data.role },
   });
 
+  // Clean up stale EstateManager record if user is no longer a manager
+  if (parsed.data.role !== "ESTATE_MANAGER") {
+    await prisma.estateManager.deleteMany({ where: { userId: id } });
+  }
+
   return NextResponse.json({ success: true });
 }

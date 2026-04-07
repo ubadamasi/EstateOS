@@ -7,7 +7,7 @@ import { getPrismaForEstate } from "@/lib/prisma";
 import { prisma } from "@/lib/prisma";
 
 const Schema = z.object({
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 export async function POST(
