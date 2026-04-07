@@ -60,25 +60,25 @@ export default async function LevyDetailPage({
           <div className="flex items-center gap-2 mb-1">
             <Link
               href="/levies"
-              className="text-[12px] text-[var(--text-muted)] hover:text-[var(--text)]"
+              className="text-[12px] text-[#64748b] hover:text-[#0f172a]"
             >
               ← Levies
             </Link>
           </div>
-          <h1 className="text-[20px] font-bold text-[var(--text)]">
+          <h1 className="text-[20px] font-bold text-[#0f172a]">
             {levy.name}
           </h1>
           {levy.description && (
-            <p className="text-[13px] text-[var(--text-muted)] mt-0.5">
+            <p className="text-[13px] text-[#64748b] mt-0.5">
               {levy.description}
             </p>
           )}
           <div className="flex items-center gap-3 mt-2">
-            <span className="text-[13px] font-semibold text-[var(--text)]">
+            <span className="text-[13px] font-semibold text-[#0f172a]">
               {formatNaira(levy.amountKobo)} / unit
             </span>
-            <span className="text-[var(--text-muted)]">·</span>
-            <span className="text-[12px] text-[var(--text-muted)]">
+            <span className="text-[#64748b]">·</span>
+            <span className="text-[12px] text-[#64748b]">
               Due{" "}
               {new Date(levy.dueDate).toLocaleDateString("en-NG", {
                 day: "numeric",
@@ -112,11 +112,11 @@ export default async function LevyDetailPage({
       {/* Pending review section */}
       {pendingPayments.length > 0 && (
         <section aria-label="Pending review" className="mb-6">
-          <h2 className="text-[14px] font-semibold text-[var(--text)] mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[var(--amber)] inline-block" />
+          <h2 className="text-[14px] font-semibold text-[#0f172a] mb-3 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#d97706] inline-block" />
             Pending Review ({pendingPayments.length})
           </h2>
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)] divide-y divide-[var(--border)]">
+          <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg overflow-hidden shadow-sm divide-y divide-[#e2e8f0]">
             {pendingPayments.map((p) => (
               <PaymentReviewRow
                 key={p.id}
@@ -136,8 +136,8 @@ export default async function LevyDetailPage({
 
       {/* All payments */}
       {levy.payments.length === 0 ? (
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-8 text-center shadow-[var(--shadow)]">
-          <p className="text-[14px] text-[var(--text-muted)]">
+        <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg p-8 text-center shadow-sm">
+          <p className="text-[14px] text-[#64748b]">
             {levy.status === "DRAFT"
               ? "Activate this levy to generate payment records for all residents."
               : "No payments yet."}
@@ -145,10 +145,10 @@ export default async function LevyDetailPage({
         </div>
       ) : (
         <section aria-label="All payments">
-          <h2 className="text-[14px] font-semibold text-[var(--text)] mb-3">
+          <h2 className="text-[14px] font-semibold text-[#0f172a] mb-3">
             All Residents
           </h2>
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)]">
+          <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg overflow-hidden shadow-sm">
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-[#f8fafc]">
@@ -156,7 +156,7 @@ export default async function LevyDetailPage({
                     (h) => (
                       <th
                         key={h}
-                        className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]"
+                        className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]"
                       >
                         {h}
                       </th>
@@ -168,15 +168,15 @@ export default async function LevyDetailPage({
                 {otherPayments.map((p) => (
                   <tr
                     key={p.id}
-                    className="border-b border-[var(--border)] last:border-b-0 hover:bg-[#fafafa]"
+                    className="border-b border-[#e2e8f0] last:border-b-0 hover:bg-[#fafafa]"
                   >
-                    <td className="px-[14px] py-[11px] text-[12px] font-semibold text-[var(--text-muted)]">
+                    <td className="px-[14px] py-[11px] text-[12px] font-semibold text-[#64748b]">
                       {p.resident.unitId}
                     </td>
-                    <td className="px-[14px] py-[11px] text-[13px] text-[var(--text)]">
+                    <td className="px-[14px] py-[11px] text-[13px] text-[#0f172a]">
                       {p.resident.name}
                     </td>
-                    <td className="px-[14px] py-[11px] text-[13px] font-semibold text-[var(--text)]">
+                    <td className="px-[14px] py-[11px] text-[13px] font-semibold text-[#0f172a]">
                       {formatNaira(p.amountKobo)}
                     </td>
                     <td className="px-[14px] py-[11px]">
@@ -195,12 +195,12 @@ export default async function LevyDetailPage({
                           href={`/api/files/${p.receiptFileId}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[12px] text-[var(--navy)] hover:underline"
+                          className="text-[12px] text-[#0f2d5c] hover:underline"
                         >
                           View receipt
                         </a>
                       ) : (
-                        <span className="text-[12px] text-[var(--text-muted)]">
+                        <span className="text-[12px] text-[#64748b]">
                           —
                         </span>
                       )}
@@ -226,8 +226,8 @@ function MiniStat({
   color?: string;
 }) {
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4 shadow-[var(--shadow)]">
-      <div className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] mb-1">
+    <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg p-4 shadow-sm">
+      <div className="text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] mb-1">
         {label}
       </div>
       <div

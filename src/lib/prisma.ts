@@ -1,12 +1,16 @@
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@/generated/prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-// Prisma 7: construct without options — connection URL comes from prisma.config.ts
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const basePrisma = globalForPrisma.prisma ?? new PrismaClient({} as any);
+function createPrismaClient() {
+  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
+  return new PrismaClient({ adapter });
+}
+
+const basePrisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = basePrisma;
 

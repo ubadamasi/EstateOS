@@ -11,7 +11,18 @@ import { formatNaira } from "@/lib/format";
 
 export default async function ChairmanDashboard() {
   const session = await getServerSession(authOptions);
-  if (!session?.user.estateId) redirect("/login");
+  if (!session) redirect("/login");
+  if (!session.user.estateId) {
+    if (session.user.role === "PLATFORM_ADMIN") {
+      return (
+        <div className="max-w-[900px] mx-auto px-5 py-12 text-center">
+          <p className="text-[18px] font-bold text-[#0f172a] mb-2">Platform Admin</p>
+          <p className="text-[14px] text-[#64748b]">No estate assigned. Use this account to manage the platform.</p>
+        </div>
+      );
+    }
+    redirect("/login");
+  }
 
   const estateId = session.user.estateId;
   const db = getPrismaForEstate(estateId);
@@ -69,10 +80,7 @@ export default async function ChairmanDashboard() {
         openDisputes={openDisputes}
       />
 
-      <div
-        className="max-w-[1200px] mx-auto px-[var(--page-padding)] py-6"
-        style={{ "--page-padding": "20px" } as React.CSSProperties}
-      >
+      <div className="max-w-[1200px] mx-auto px-5 py-6">
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <StatCard
@@ -102,40 +110,40 @@ export default async function ChairmanDashboard() {
           {/* Levy Ledger */}
           <section aria-label="Levy ledger">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[15px] font-semibold text-[var(--text)]">
+              <h2 className="text-[15px] font-semibold text-[#0f172a]">
                 Levy Ledger
               </h2>
               <a
                 href="/levies/new"
-                className="text-[13px] font-semibold text-[var(--navy)] hover:underline"
+                className="text-[13px] font-semibold text-[#0f2d5c] hover:underline"
               >
                 + New levy
               </a>
             </div>
 
             {levies.length === 0 ? (
-              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-[var(--shadow)]">
+              <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg shadow-sm">
                 <EmptyState
                   message="No levies created yet."
                   context="Create your first levy to start collecting from residents."
-                  action={{ label: "Create levy", onClick: () => {} }}
+                  action={{ label: "Create levy", href: "/levies/new" }}
                 />
               </div>
             ) : (
-              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)]">
+              <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg overflow-hidden shadow-sm">
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-[#f8fafc]">
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Levy
                       </th>
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Amount
                       </th>
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Paid
                       </th>
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Status
                       </th>
                     </tr>
@@ -146,33 +154,41 @@ export default async function ChairmanDashboard() {
                       return (
                         <tr
                           key={levy.id}
-                          className="border-b border-[var(--border)] last:border-b-0 hover:bg-[#fafafa]"
+                          className="border-b border-[#e2e8f0] last:border-b-0 hover:bg-[#fafafa]"
                         >
                           <td className="px-[14px] py-[12px] text-[13px]">
                             <a
                               href={`/levies/${levy.id}`}
-                              className="font-semibold text-[var(--text)] hover:text-[var(--navy)] hover:underline"
+                              className="font-semibold text-[#0f172a] hover:text-[#0f2d5c] hover:underline"
                             >
                               {levy.name}
                             </a>
-                            <div className="text-[11px] text-[var(--text-muted)] mt-0.5">
-                              Due {new Date(levy.dueDate).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" })}
+                            <div className="text-[11px] text-[#64748b] mt-0.5">
+                              Due{" "}
+                              {new Date(levy.dueDate).toLocaleDateString(
+                                "en-NG",
+                                {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )}
                             </div>
                           </td>
                           <td className="px-[14px] py-[12px] text-[13px] font-semibold">
                             {formatNaira(levy.amountKobo)}
                           </td>
-                          <td className="px-[14px] py-[12px] text-[13px] text-[var(--text-muted)]">
+                          <td className="px-[14px] py-[12px] text-[13px] text-[#64748b]">
                             {paidCount}
                           </td>
                           <td className="px-[14px] py-[12px]">
                             <span
                               className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold ${
                                 levy.status === "ACTIVE"
-                                  ? "bg-[var(--green-light)] text-[var(--green)]"
+                                  ? "bg-[#dcfce7] text-[#16a34a]"
                                   : levy.status === "DRAFT"
-                                    ? "bg-[var(--bg)] text-[var(--text-muted)]"
-                                    : "bg-[var(--border)] text-[var(--text-muted)]"
+                                    ? "bg-[#f1f5f9] text-[#64748b]"
+                                    : "bg-[#e2e8f0] text-[#64748b]"
                               }`}
                             >
                               {levy.status === "ACTIVE"
@@ -194,40 +210,40 @@ export default async function ChairmanDashboard() {
           {/* Expense Log */}
           <section aria-label="Expense log">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[15px] font-semibold text-[var(--text)]">
+              <h2 className="text-[15px] font-semibold text-[#0f172a]">
                 Expense Log
               </h2>
               <a
                 href="/expenses/new"
-                className="text-[13px] font-semibold text-[var(--navy)] hover:underline"
+                className="text-[13px] font-semibold text-[#0f2d5c] hover:underline"
               >
                 + Add expense
               </a>
             </div>
 
             {recentExpenses.length === 0 ? (
-              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-[var(--shadow)]">
+              <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg shadow-sm">
                 <EmptyState
                   message="No expenses recorded."
                   context="Post your first expense so residents can see where funds are going."
-                  action={{ label: "Add expense", onClick: () => {} }}
+                  action={{ label: "Add expense", href: "/expenses/new" }}
                 />
               </div>
             ) : (
-              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)]">
+              <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg overflow-hidden shadow-sm">
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-[#f8fafc]">
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Category
                       </th>
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Description
                       </th>
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Amount
                       </th>
-                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]">
+                      <th className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]">
                         Date
                       </th>
                     </tr>
@@ -236,35 +252,40 @@ export default async function ChairmanDashboard() {
                     {recentExpenses.map((expense) => (
                       <tr
                         key={expense.id}
-                        className="border-b border-[var(--border)] last:border-b-0 hover:bg-[#fafafa]"
+                        className="border-b border-[#e2e8f0] last:border-b-0 hover:bg-[#fafafa]"
                       >
                         <td className="px-[14px] py-[12px]">
                           <CategoryDot category={expense.category} />
                         </td>
-                        <td className="px-[14px] py-[12px] text-[13px] text-[var(--text)]">
+                        <td className="px-[14px] py-[12px] text-[13px] text-[#0f172a]">
                           {expense.description}
                           {expense.amountKobo < 0 && (
-                            <span className="ml-1 text-[10px] text-[var(--text-muted)]">
+                            <span className="ml-1 text-[10px] text-[#64748b]">
                               (correction)
                             </span>
                           )}
                         </td>
                         <td
-                          className={`px-[14px] py-[12px] text-[13px] font-semibold ${expense.amountKobo < 0 ? "text-[var(--green)]" : "text-[var(--text)]"}`}
+                          className={`px-[14px] py-[12px] text-[13px] font-semibold ${expense.amountKobo < 0 ? "text-[#16a34a]" : "text-[#0f172a]"}`}
                         >
                           {expense.amountKobo < 0 ? "−" : ""}
                           {formatNaira(Math.abs(expense.amountKobo))}
                         </td>
-                        <td className="px-[14px] py-[12px] text-[12px] text-[var(--text-muted)]">
-                          {new Date(expense.expenseDate).toLocaleDateString("en-NG", { day: "numeric", month: "short" })}
+                        <td className="px-[14px] py-[12px] text-[12px] text-[#64748b]">
+                          {new Date(expense.expenseDate).toLocaleDateString(
+                            "en-NG",
+                            { day: "numeric", month: "short" },
+                          )}
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                <div className="px-[14px] py-2 border-t border-[var(--border)] flex items-center gap-1 text-[11px] text-[var(--text-subtle)]">
+                <div className="px-[14px] py-2 border-t border-[#e2e8f0] flex items-center gap-1 text-[11px] text-[#94a3b8]">
                   <span>🔒</span>
-                  <span>Entries are permanent and cannot be edited or deleted</span>
+                  <span>
+                    Entries are permanent and cannot be edited or deleted
+                  </span>
                 </div>
               </div>
             )}
@@ -288,8 +309,8 @@ function StatCard({
   valueColor?: string;
 }) {
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-[var(--card-padding)] shadow-[var(--shadow)]">
-      <div className="text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] mb-1">
+    <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg p-4 shadow-sm">
+      <div className="text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] mb-1">
         {label}
       </div>
       <div

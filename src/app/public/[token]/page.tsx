@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { CategoryDot, categoryLabels } from "@/components/ui/CategoryDot";
 import { formatNaira } from "@/lib/format";
-import { ExpenseCategory } from "@/generated/prisma";
+import { ExpenseCategory } from "@/generated/prisma/enums";
 
 // Live data, refreshed every 60 seconds at the edge
 export const revalidate = 60;
@@ -54,7 +54,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
   return (
     <div className="min-h-screen">
       {/* No-login badge */}
-      <div className="bg-[#f0fdf4] border-b border-[#bbf7d0] text-center py-2 px-4 text-[12px] font-semibold text-[var(--green)]">
+      <div className="bg-[#f0fdf4] border-b border-[#bbf7d0] text-center py-2 px-4 text-[12px] font-semibold text-[#16a34a]">
         🔓 Public page — no login required · Share this link in your WhatsApp
         group
       </div>
@@ -101,22 +101,22 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
       {/* Content */}
       <main className="max-w-[600px] mx-auto px-5 py-6 pb-12">
         {/* Trust banner */}
-        <div className="bg-[var(--surface)] border border-[#bbf7d0] rounded-[var(--radius)] p-4 mb-5 shadow-[var(--shadow)]">
+        <div className="bg-[#ffffff] border border-[#bbf7d0] rounded-lg p-4 mb-5 shadow-sm">
           <div className="flex items-center gap-2 mb-2">
             <span className="text-[20px]">🛡️</span>
-            <span className="text-[14px] font-bold text-[var(--green)]">
+            <span className="text-[14px] font-bold text-[#16a34a]">
               Transparent & Verifiable
             </span>
           </div>
-          <p className="text-[13px] text-[var(--text-muted)] leading-relaxed">
+          <p className="text-[13px] text-[#64748b] leading-relaxed">
             Every naira collected and every expense recorded is logged here in
             real time.{" "}
-            <strong className="text-[var(--text)]">
+            <strong className="text-[#0f172a]">
               This record cannot be deleted or edited.
             </strong>{" "}
             What you see is the complete financial picture.
           </p>
-          <p className="text-[11px] text-[var(--text-subtle)] mt-2">
+          <p className="text-[11px] text-[#94a3b8] mt-2">
             Last updated:{" "}
             {new Date().toLocaleDateString("en-NG", {
               day: "numeric",
@@ -131,7 +131,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
         {/* Balance detail */}
         <section className="mb-5">
           <h2 className="text-[15px] font-bold mb-3">Community Balance</h2>
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4 shadow-[var(--shadow)]">
+          <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg p-4 shadow-sm">
             {[
               {
                 label: "Total levies collected",
@@ -146,9 +146,9 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
             ].map(({ label, value, color }) => (
               <div
                 key={label}
-                className="flex items-center justify-between py-[10px] border-b border-[var(--border)]"
+                className="flex items-center justify-between py-[10px] border-b border-[#e2e8f0]"
               >
-                <span className="text-[13px] text-[var(--text-muted)]">
+                <span className="text-[13px] text-[#64748b]">
                   {label}
                 </span>
                 <span
@@ -160,7 +160,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
               </div>
             ))}
             <div className="flex items-center justify-between pt-3">
-              <span className="text-[13px] font-bold text-[var(--text)]">
+              <span className="text-[13px] font-bold text-[#0f172a]">
                 Available Balance
               </span>
               <span
@@ -186,7 +186,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
                 return (
                   <div
                     key={cat.category}
-                    className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-3 shadow-[var(--shadow)]"
+                    className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg p-3 shadow-sm"
                   >
                     <div className="flex items-center justify-between mb-1.5">
                       <CategoryDot category={cat.category as ExpenseCategory} />
@@ -214,12 +214,12 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
         <section className="mb-5">
           <h2 className="text-[15px] font-bold mb-3">Recent Expenses</h2>
           {recentExpenses.length === 0 ? (
-            <p className="text-[13px] text-[var(--text-muted)]">
+            <p className="text-[13px] text-[#64748b]">
               No expenses recorded yet.
             </p>
           ) : (
             <>
-              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)]">
+              <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse min-w-[400px]">
                     <thead>
@@ -229,7 +229,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
                             <th
                               key={h}
                               scope="col"
-                              className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]"
+                              className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]"
                             >
                               {h}
                             </th>
@@ -241,7 +241,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
                       {recentExpenses.map((exp) => (
                         <tr
                           key={exp.id}
-                          className="border-b border-[var(--border)] last:border-b-0"
+                          className="border-b border-[#e2e8f0] last:border-b-0"
                         >
                           <td className="px-[14px] py-[12px]">
                             <CategoryDot
@@ -254,7 +254,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
                           <td className="px-[14px] py-[12px] text-[13px] font-semibold">
                             {formatNaira(exp.amountKobo)}
                           </td>
-                          <td className="px-[14px] py-[12px] text-[12px] text-[var(--text-muted)]">
+                          <td className="px-[14px] py-[12px] text-[12px] text-[#64748b]">
                             {new Date(exp.expenseDate).toLocaleDateString(
                               "en-NG",
                               { day: "numeric", month: "short" }
@@ -266,7 +266,7 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
                   </table>
                 </div>
               </div>
-              <p className="text-[11px] text-[var(--text-subtle)] mt-2 flex items-center gap-1">
+              <p className="text-[11px] text-[#94a3b8] mt-2 flex items-center gap-1">
                 🔒 All entries are permanent and cannot be edited or deleted.
                 Corrections are logged as separate entries.
               </p>
@@ -276,19 +276,19 @@ export default async function PublicSummaryPage({ params }: PublicPageProps) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[var(--surface)] border-t border-[var(--border)] text-center py-6 px-4">
+      <footer className="bg-[#ffffff] border-t border-[#e2e8f0] text-center py-6 px-4">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <div className="w-7 h-7 bg-[var(--navy)] rounded-[6px] flex items-center justify-center text-white font-extrabold text-[12px]">
+          <div className="w-7 h-7 bg-[#0f2d5c] rounded-[6px] flex items-center justify-center text-white font-extrabold text-[12px]">
             EO
           </div>
-          <span className="text-[14px] font-bold text-[var(--navy)]">EstateOS</span>
+          <span className="text-[14px] font-bold text-[#0f2d5c]">EstateOS</span>
         </div>
-        <p className="text-[12px] text-[var(--text-muted)] mb-3">
+        <p className="text-[12px] text-[#64748b] mb-3">
           Transparent estate finances for every Nigerian community.
         </p>
         <a
           href="/login"
-          className="inline-block bg-[var(--navy)] text-white font-semibold text-[13px] px-5 py-2 rounded-[6px]"
+          className="inline-block bg-[#0f2d5c] text-white font-semibold text-[13px] px-5 py-2 rounded-[6px]"
         >
           Manage your estate with EstateOS →
         </a>

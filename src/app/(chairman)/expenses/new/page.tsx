@@ -121,13 +121,13 @@ export default function NewExpensePage() {
   return (
     <div className="max-w-[560px] mx-auto px-5 py-6">
       <div className="flex items-center gap-3 mb-6">
-        <button
-          onClick={() => router.back()}
-          className="text-[13px] text-[var(--text-muted)] hover:text-[var(--text)]"
+        <a
+          href="/expenses"
+          className="text-[13px] text-[#64748b] hover:text-[#0f172a]"
         >
-          ← Back
-        </button>
-        <h1 className="text-[18px] font-bold text-[var(--text)]">
+          ← Expenses
+        </a>
+        <h1 className="text-[18px] font-bold text-[#0f172a]">
           Post Expense
         </h1>
       </div>
@@ -135,20 +135,20 @@ export default function NewExpensePage() {
       {/* Double-confirm modal overlay */}
       {requiresConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-[var(--radius)] shadow-lg max-w-sm w-full p-6">
-            <h2 className="text-[16px] font-bold text-[var(--text)] mb-2">
+          <div className="bg-white rounded-lg shadow-lg max-w-sm w-full p-6">
+            <h2 className="text-[16px] font-bold text-[#0f172a] mb-2">
               Confirm large expense
             </h2>
-            <p className="text-[14px] text-[var(--text-muted)] mb-1">
+            <p className="text-[14px] text-[#64748b] mb-1">
               {confirmMessage}
             </p>
-            <p className="text-[13px] text-[var(--text-muted)] mb-5">
+            <p className="text-[13px] text-[#64748b] mb-5">
               This will be permanently recorded. Are you sure?
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setRequiresConfirm(false)}
-                className="flex-1 border border-[var(--border)] text-[var(--text)] text-[14px] font-semibold py-2.5 rounded-[var(--radius)] hover:bg-[var(--bg)]"
+                className="flex-1 border border-[#e2e8f0] text-[#0f172a] text-[14px] font-semibold py-2.5 rounded-lg hover:bg-[#f1f5f9]"
               >
                 Cancel
               </button>
@@ -158,7 +158,7 @@ export default function NewExpensePage() {
                   submit(true);
                 }}
                 disabled={loading}
-                className="flex-1 bg-[var(--red)] text-white text-[14px] font-semibold py-2.5 rounded-[var(--radius)] hover:bg-[#b91c1c] disabled:opacity-60"
+                className="flex-1 bg-[#dc2626] text-white text-[14px] font-semibold py-2.5 rounded-lg hover:bg-[#b91c1c] disabled:opacity-60"
               >
                 {loading ? "Posting..." : "Yes, post expense"}
               </button>
@@ -167,7 +167,7 @@ export default function NewExpensePage() {
         </div>
       )}
 
-      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-[var(--shadow)] p-6">
+      <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg shadow-sm p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Correction toggle */}
           <label className="flex items-center gap-2 cursor-pointer">
@@ -177,15 +177,15 @@ export default function NewExpensePage() {
               onChange={(e) =>
                 setForm({ ...form, isCorrection: e.target.checked })
               }
-              className="w-4 h-4 accent-[var(--navy)]"
+              className="w-4 h-4 accent-[#0f2d5c]"
             />
-            <span className="text-[13px] text-[var(--text)]">
+            <span className="text-[13px] text-[#0f172a]">
               This is a correction entry (negative amount)
             </span>
           </label>
 
           {form.isCorrection && (
-            <div className="bg-[var(--amber-light)] border border-amber-200 rounded-[var(--radius)] px-3 py-2 text-[12px] text-amber-800">
+            <div className="bg-[#fef3c7] border border-amber-200 rounded-lg px-3 py-2 text-[12px] text-amber-800">
               Correction entries post a negative amount to offset a previous
               expense. The original entry is never modified.
             </div>
@@ -195,7 +195,7 @@ export default function NewExpensePage() {
             <select
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
-              className="w-full border border-[var(--border)] rounded-[var(--radius)] px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[var(--navy)] bg-[var(--bg)]"
+              className="w-full border border-[#e2e8f0] rounded-lg px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#0f2d5c] bg-[#f1f5f9]"
             >
               {CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>
@@ -215,13 +215,13 @@ export default function NewExpensePage() {
               placeholder="e.g. Monthly security payment to Femi Security Ltd"
               maxLength={300}
               required
-              className="w-full border border-[var(--border)] rounded-[var(--radius)] px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[var(--navy)] bg-[var(--bg)]"
+              className="w-full border border-[#e2e8f0] rounded-lg px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#0f2d5c] bg-[#f1f5f9]"
             />
           </Field>
 
           <Field label="Amount (₦)" required>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[var(--text-muted)]">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#64748b]">
                 {form.isCorrection ? "−₦" : "₦"}
               </span>
               <input
@@ -232,11 +232,11 @@ export default function NewExpensePage() {
                 }
                 placeholder="e.g. 50000"
                 required
-                className="w-full border border-[var(--border)] rounded-[var(--radius)] pl-8 pr-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[var(--navy)] bg-[var(--bg)]"
+                className="w-full border border-[#e2e8f0] rounded-lg pl-8 pr-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#0f2d5c] bg-[#f1f5f9]"
               />
             </div>
             {isLargeAmount && (
-              <p className="text-[11px] text-[var(--amber)] mt-1 font-semibold">
+              <p className="text-[11px] text-[#d97706] mt-1 font-semibold">
                 Large amount ({formatNaira(previewKobo)}) — you will be asked
                 to confirm.
               </p>
@@ -251,7 +251,7 @@ export default function NewExpensePage() {
                 setForm({ ...form, expenseDate: e.target.value })
               }
               required
-              className="w-full border border-[var(--border)] rounded-[var(--radius)] px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[var(--navy)] bg-[var(--bg)]"
+              className="w-full border border-[#e2e8f0] rounded-lg px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#0f2d5c] bg-[#f1f5f9]"
             />
           </Field>
 
@@ -266,7 +266,7 @@ export default function NewExpensePage() {
                 placeholder="e.g. Duplicate entry from 2026-03-15"
                 maxLength={500}
                 required={form.isCorrection}
-                className="w-full border border-[var(--border)] rounded-[var(--radius)] px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[var(--navy)] bg-[var(--bg)]"
+                className="w-full border border-[#e2e8f0] rounded-lg px-3 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-[#0f2d5c] bg-[#f1f5f9]"
               />
             </Field>
           )}
@@ -277,9 +277,9 @@ export default function NewExpensePage() {
               type="file"
               accept="image/jpeg,image/png,image/webp,application/pdf"
               onChange={(e) => setReceiptFile(e.target.files?.[0] ?? null)}
-              className="w-full text-[13px] text-[var(--text)]"
+              className="w-full text-[13px] text-[#0f172a]"
             />
-            <p className="text-[11px] text-[var(--text-muted)] mt-1">
+            <p className="text-[11px] text-[#64748b] mt-1">
               JPG, PNG, WebP or PDF — max 5 MB
             </p>
           </Field>
@@ -287,7 +287,7 @@ export default function NewExpensePage() {
           {error && (
             <p
               role="alert"
-              className="text-[13px] text-[var(--red)] bg-[var(--red-light)] px-3 py-2 rounded-[var(--radius)]"
+              className="text-[13px] text-[#dc2626] bg-[#fee2e2] px-3 py-2 rounded-lg"
             >
               {error}
             </p>
@@ -297,14 +297,14 @@ export default function NewExpensePage() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex-1 border border-[var(--border)] text-[var(--text)] text-[14px] font-semibold py-2.5 rounded-[var(--radius)] hover:bg-[var(--bg)] transition-colors"
+              className="flex-1 border border-[#e2e8f0] text-[#0f172a] text-[14px] font-semibold py-2.5 rounded-lg hover:bg-[#f1f5f9] transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-[var(--navy)] text-white text-[14px] font-semibold py-2.5 rounded-[var(--radius)] hover:bg-[#0a2246] transition-colors disabled:opacity-60"
+              className="flex-1 bg-[#0f2d5c] text-white text-[14px] font-semibold py-2.5 rounded-lg hover:bg-[#0a2246] transition-colors disabled:opacity-60"
             >
               {loading ? "Posting..." : "Post expense"}
             </button>
@@ -312,7 +312,7 @@ export default function NewExpensePage() {
         </form>
       </div>
 
-      <p className="mt-4 text-[12px] text-[var(--text-muted)] text-center">
+      <p className="mt-4 text-[12px] text-[#64748b] text-center">
         Posted expenses are permanent and visible to all residents.
       </p>
     </div>
@@ -330,9 +330,9 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-[13px] font-semibold text-[var(--text)] mb-1.5">
+      <label className="block text-[13px] font-semibold text-[#0f172a] mb-1.5">
         {label}
-        {required && <span className="text-[var(--red)] ml-0.5">*</span>}
+        {required && <span className="text-[#dc2626] ml-0.5">*</span>}
       </label>
       {children}
     </div>

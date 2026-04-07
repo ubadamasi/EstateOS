@@ -3,7 +3,16 @@
     "allow": [
       "Bash(mkdir -p /Users/ubadamasi/documents/project/2026/dan/src/app/public/[token])",
       "Bash(mkdir -p /Users/ubadamasi/documents/project/2026/dan/src/app/api/auth/[...nextauth])",
-      "Bash(bunx prisma:*)"
+      "Bash(bunx prisma:*)",
+      "Bash(npm run:*)",
+      "Bash(npx tsx -e ':*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "Bash(bunx tsc:*)",
+      "Bash(bunx vitest:*)",
+      "Skill(qa)"
     ]
   }
 }

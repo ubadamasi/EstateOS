@@ -30,33 +30,38 @@ export default async function ExpensesPage() {
 
   return (
     <div className="max-w-[900px] mx-auto px-5 py-6">
+      <div className="mb-4">
+        <Link href="/dashboard" className="text-[13px] text-[#64748b] hover:text-[#0f172a]">
+          ← Dashboard
+        </Link>
+      </div>
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-[18px] font-bold text-[var(--text)]">
+          <h1 className="text-[18px] font-bold text-[#0f172a]">
             Expense Log
           </h1>
-          <p className="text-[12px] text-[var(--text-muted)] mt-0.5">
+          <p className="text-[12px] text-[#64748b] mt-0.5">
             Net total: {totalKobo >= 0 ? "" : "−"}
             {formatNaira(Math.abs(totalKobo))}
           </p>
         </div>
         <Link
           href="/expenses/new"
-          className="inline-flex items-center gap-1.5 bg-[var(--navy)] text-white text-[13px] font-semibold px-4 py-2 rounded-[var(--radius)] hover:bg-[#0a2246] transition-colors"
+          className="inline-flex items-center gap-1.5 bg-[#0f2d5c] text-white text-[13px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0a2246] transition-colors"
         >
           + Add expense
         </Link>
       </div>
 
       {expenses.length === 0 ? (
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-[var(--shadow)]">
+        <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg shadow-sm">
           <EmptyState
             message="No expenses recorded yet."
             context="Post expenses so residents can see where funds are being spent."
           />
         </div>
       ) : (
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)]">
+        <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg overflow-hidden shadow-sm">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-[#f8fafc]">
@@ -64,7 +69,7 @@ export default async function ExpensesPage() {
                   (h) => (
                     <th
                       key={h}
-                      className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]"
+                      className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]"
                     >
                       {h}
                     </th>
@@ -76,31 +81,31 @@ export default async function ExpensesPage() {
               {expenses.map((exp) => (
                 <tr
                   key={exp.id}
-                  className="border-b border-[var(--border)] last:border-b-0 hover:bg-[#fafafa]"
+                  className="border-b border-[#e2e8f0] last:border-b-0 hover:bg-[#fafafa]"
                 >
                   <td className="px-[14px] py-[11px]">
                     <CategoryDot category={exp.category} />
                   </td>
-                  <td className="px-[14px] py-[11px] text-[13px] text-[var(--text)] max-w-[280px]">
+                  <td className="px-[14px] py-[11px] text-[13px] text-[#0f172a] max-w-[280px]">
                     {exp.description}
                     {exp.amountKobo < 0 && (
-                      <span className="ml-1 text-[10px] text-[var(--text-muted)]">
+                      <span className="ml-1 text-[10px] text-[#64748b]">
                         (correction)
                       </span>
                     )}
                     {exp.correctionNote && (
-                      <div className="text-[11px] text-[var(--text-muted)] mt-0.5 italic">
+                      <div className="text-[11px] text-[#64748b] mt-0.5 italic">
                         Note: {exp.correctionNote}
                       </div>
                     )}
                   </td>
                   <td
-                    className={`px-[14px] py-[11px] text-[13px] font-semibold ${exp.amountKobo < 0 ? "text-[var(--green)]" : "text-[var(--text)]"}`}
+                    className={`px-[14px] py-[11px] text-[13px] font-semibold ${exp.amountKobo < 0 ? "text-[#16a34a]" : "text-[#0f172a]"}`}
                   >
                     {exp.amountKobo < 0 ? "−" : ""}
                     {formatNaira(Math.abs(exp.amountKobo))}
                   </td>
-                  <td className="px-[14px] py-[11px] text-[12px] text-[var(--text-muted)] whitespace-nowrap">
+                  <td className="px-[14px] py-[11px] text-[12px] text-[#64748b] whitespace-nowrap">
                     {new Date(exp.expenseDate).toLocaleDateString("en-NG", {
                       day: "numeric",
                       month: "short",
@@ -113,12 +118,12 @@ export default async function ExpensesPage() {
                         href={`/api/files/${exp.receiptFileId}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[12px] text-[var(--navy)] hover:underline"
+                        className="text-[12px] text-[#0f2d5c] hover:underline"
                       >
                         View
                       </a>
                     ) : (
-                      <span className="text-[12px] text-[var(--text-muted)]">
+                      <span className="text-[12px] text-[#64748b]">
                         —
                       </span>
                     )}
@@ -127,7 +132,7 @@ export default async function ExpensesPage() {
               ))}
             </tbody>
           </table>
-          <div className="px-[14px] py-2 border-t border-[var(--border)] flex items-center gap-1 text-[11px] text-[var(--text-subtle)]">
+          <div className="px-[14px] py-2 border-t border-[#e2e8f0] flex items-center gap-1 text-[11px] text-[#94a3b8]">
             <span>🔒</span>
             <span>Entries are permanent and cannot be edited or deleted</span>
           </div>

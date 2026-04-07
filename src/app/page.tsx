@@ -11,7 +11,7 @@ export default async function RootPage() {
     case "ESTATE_MANAGER":
       redirect("/dashboard");
     case "PLATFORM_ADMIN":
-      redirect("/admin/dashboard");
+      redirect("/admin");
     case "RESIDENT":
     default:
       redirect("/home");

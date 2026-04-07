@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { getPrismaForEstate } from "@/lib/prisma";
 import { ResidentImport } from "@/components/chairman/ResidentImport";
 import { ResidentList } from "@/components/chairman/ResidentList";
+import { AddResidentForm } from "@/components/chairman/AddResidentForm";
 
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions);
@@ -17,6 +18,7 @@ export default async function SettingsPage() {
     db.resident.findMany({
       where: { estateId },
       orderBy: { unitId: "asc" },
+      select: { id: true, unitId: true, name: true, email: true, phone: true, type: true, isActive: true, userId: true },
     }),
   ]);
 
@@ -24,41 +26,46 @@ export default async function SettingsPage() {
 
   return (
     <div className="max-w-[800px] mx-auto px-5 py-6 space-y-8">
-      <h1 className="text-[18px] font-bold text-[var(--text)]">Settings</h1>
+      <div>
+        <a href="/dashboard" className="text-[13px] text-[#64748b] hover:text-[#0f172a]">
+          ← Dashboard
+        </a>
+      </div>
+      <h1 className="text-[18px] font-bold text-[#0f172a]">Settings</h1>
 
       {/* Estate info */}
       <section>
-        <h2 className="text-[14px] font-semibold text-[var(--text)] mb-3">
+        <h2 className="text-[14px] font-semibold text-[#0f172a] mb-3">
           Estate
         </h2>
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4 shadow-[var(--shadow)] space-y-1 text-[13px]">
+        <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg p-4 shadow-sm space-y-1 text-[13px]">
           <div>
-            <span className="text-[var(--text-muted)]">Name:</span>{" "}
+            <span className="text-[#64748b]">Name:</span>{" "}
             <span className="font-semibold">{estate.name}</span>
           </div>
           <div>
-            <span className="text-[var(--text-muted)]">Address:</span>{" "}
+            <span className="text-[#64748b]">Address:</span>{" "}
             {estate.address}, {estate.city}, {estate.state}
           </div>
           <div>
-            <span className="text-[var(--text-muted)]">Units:</span>{" "}
+            <span className="text-[#64748b]">Units:</span>{" "}
             {estate.unitCount}
           </div>
           <div>
-            <span className="text-[var(--text-muted)]">Status:</span>{" "}
+            <span className="text-[#64748b]">Status:</span>{" "}
             <span
-              className={`font-semibold ${estate.status === "ACTIVE" ? "text-[var(--green)]" : "text-[var(--amber)]"}`}
+              className={`font-semibold ${estate.status === "ACTIVE" ? "text-[#16a34a]" : "text-[#d97706]"}`}
             >
               {estate.status}
             </span>
           </div>
           <div>
-            <span className="text-[var(--text-muted)]">Public summary:</span>{" "}
+            <span className="text-[#64748b]">Public summary:</span>{" "}
             <a
               href={`/public/${estate.publicToken}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--navy)] hover:underline"
+              className="text-[#0f2d5c] hover:underline"
             >
               View →
             </a>
@@ -68,16 +75,16 @@ export default async function SettingsPage() {
 
       {/* Import residents */}
       <section>
-        <h2 className="text-[14px] font-semibold text-[var(--text)] mb-1">
+        <h2 className="text-[14px] font-semibold text-[#0f172a] mb-1">
           Import Residents
         </h2>
-        <p className="text-[12px] text-[var(--text-muted)] mb-3">
+        <p className="text-[12px] text-[#64748b] mb-3">
           Upload a CSV with columns:{" "}
-          <code className="bg-[var(--bg)] px-1 rounded">name</code>,{" "}
-          <code className="bg-[var(--bg)] px-1 rounded">unit_id</code>,{" "}
-          <code className="bg-[var(--bg)] px-1 rounded">phone</code>,{" "}
-          <code className="bg-[var(--bg)] px-1 rounded">email</code> (optional),{" "}
-          <code className="bg-[var(--bg)] px-1 rounded">type</code> (LANDLORD or
+          <code className="bg-[#f1f5f9] px-1 rounded">name</code>,{" "}
+          <code className="bg-[#f1f5f9] px-1 rounded">unit_id</code>,{" "}
+          <code className="bg-[#f1f5f9] px-1 rounded">phone</code>,{" "}
+          <code className="bg-[#f1f5f9] px-1 rounded">email</code> (optional),{" "}
+          <code className="bg-[#f1f5f9] px-1 rounded">type</code> (LANDLORD or
           TENANT, optional).
         </p>
         <ResidentImport />
@@ -85,9 +92,12 @@ export default async function SettingsPage() {
 
       {/* Resident list */}
       <section>
-        <h2 className="text-[14px] font-semibold text-[var(--text)] mb-3">
-          Residents ({residents.filter((r) => r.isActive).length} active)
-        </h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-[14px] font-semibold text-[#0f172a]">
+            Residents ({residents.filter((r) => r.isActive).length} active)
+          </h2>
+          <AddResidentForm />
+        </div>
         <ResidentList residents={residents} />
       </section>
     </div>

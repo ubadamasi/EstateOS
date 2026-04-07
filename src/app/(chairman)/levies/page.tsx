@@ -36,25 +36,30 @@ export default async function LeviesPage() {
 
   return (
     <div className="max-w-[900px] mx-auto px-5 py-6">
+      <div className="mb-4">
+        <Link href="/dashboard" className="text-[13px] text-[#64748b] hover:text-[#0f172a]">
+          ← Dashboard
+        </Link>
+      </div>
       <div className="flex items-center justify-between mb-5">
-        <h1 className="text-[18px] font-bold text-[var(--text)]">Levies</h1>
+        <h1 className="text-[18px] font-bold text-[#0f172a]">Levies</h1>
         <Link
           href="/levies/new"
-          className="inline-flex items-center gap-1.5 bg-[var(--navy)] text-white text-[13px] font-semibold px-4 py-2 rounded-[var(--radius)] hover:bg-[#0a2246] transition-colors"
+          className="inline-flex items-center gap-1.5 bg-[#0f2d5c] text-white text-[13px] font-semibold px-4 py-2 rounded-lg hover:bg-[#0a2246] transition-colors"
         >
           + New levy
         </Link>
       </div>
 
       {enriched.length === 0 ? (
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] shadow-[var(--shadow)]">
+        <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg shadow-sm">
           <EmptyState
             message="No levies yet."
             context="Create your first levy to start collecting from residents."
           />
         </div>
       ) : (
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] overflow-hidden shadow-[var(--shadow)]">
+        <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg overflow-hidden shadow-sm">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-[#f8fafc]">
@@ -62,7 +67,7 @@ export default async function LeviesPage() {
                   (h) => (
                     <th
                       key={h}
-                      className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[var(--text-muted)] uppercase tracking-[0.04em] border-b border-[var(--border)]"
+                      className="px-[14px] py-[10px] text-left text-[11px] font-semibold text-[#64748b] uppercase tracking-[0.04em] border-b border-[#e2e8f0]"
                     >
                       {h}
                     </th>
@@ -74,25 +79,25 @@ export default async function LeviesPage() {
               {enriched.map((levy) => (
                 <tr
                   key={levy.id}
-                  className="border-b border-[var(--border)] last:border-b-0 hover:bg-[#fafafa]"
+                  className="border-b border-[#e2e8f0] last:border-b-0 hover:bg-[#fafafa]"
                 >
                   <td className="px-[14px] py-[12px]">
                     <Link
                       href={`/levies/${levy.id}`}
-                      className="text-[13px] font-semibold text-[var(--text)] hover:text-[var(--navy)] hover:underline"
+                      className="text-[13px] font-semibold text-[#0f172a] hover:text-[#0f2d5c] hover:underline"
                     >
                       {levy.name}
                     </Link>
                     {levy.description && (
-                      <div className="text-[11px] text-[var(--text-muted)] mt-0.5 max-w-[200px] truncate">
+                      <div className="text-[11px] text-[#64748b] mt-0.5 max-w-[200px] truncate">
                         {levy.description}
                       </div>
                     )}
                   </td>
-                  <td className="px-[14px] py-[12px] text-[13px] font-semibold text-[var(--text)]">
+                  <td className="px-[14px] py-[12px] text-[13px] font-semibold text-[#0f172a]">
                     {formatNaira(levy.amountKobo)}
                   </td>
-                  <td className="px-[14px] py-[12px] text-[12px] text-[var(--text-muted)]">
+                  <td className="px-[14px] py-[12px] text-[12px] text-[#64748b]">
                     {new Date(levy.dueDate).toLocaleDateString("en-NG", {
                       day: "numeric",
                       month: "short",
@@ -100,18 +105,18 @@ export default async function LeviesPage() {
                     })}
                     {new Date(levy.dueDate) < new Date() &&
                       levy.status === "ACTIVE" && (
-                        <span className="ml-1.5 text-[10px] font-semibold text-[var(--red)] bg-[var(--red-light)] px-1.5 py-0.5 rounded">
+                        <span className="ml-1.5 text-[10px] font-semibold text-[#dc2626] bg-[#fee2e2] px-1.5 py-0.5 rounded">
                           Overdue
                         </span>
                       )}
                   </td>
-                  <td className="px-[14px] py-[12px] text-[13px] font-semibold text-[var(--green)]">
+                  <td className="px-[14px] py-[12px] text-[13px] font-semibold text-[#16a34a]">
                     {formatNaira(levy.totalCollectedKobo)}
                   </td>
-                  <td className="px-[14px] py-[12px] text-[12px] text-[var(--text-muted)]">
+                  <td className="px-[14px] py-[12px] text-[12px] text-[#64748b]">
                     {levy.paidCount} / {levy.payments.length}
                     {levy.pendingCount > 0 && (
-                      <span className="ml-1.5 text-[10px] font-semibold text-[var(--amber)] bg-[var(--amber-light)] px-1.5 py-0.5 rounded">
+                      <span className="ml-1.5 text-[10px] font-semibold text-[#d97706] bg-[#fef3c7] px-1.5 py-0.5 rounded">
                         {levy.pendingCount} pending
                       </span>
                     )}
@@ -122,7 +127,7 @@ export default async function LeviesPage() {
                   <td className="px-[14px] py-[12px]">
                     <Link
                       href={`/levies/${levy.id}`}
-                      className="text-[12px] text-[var(--navy)] hover:underline"
+                      className="text-[12px] text-[#0f2d5c] hover:underline"
                     >
                       View →
                     </Link>
@@ -140,10 +145,10 @@ export default async function LeviesPage() {
 function LevyStatusBadge({ status }: { status: string }) {
   const styles =
     status === "ACTIVE"
-      ? "bg-[var(--green-light)] text-[var(--green)]"
+      ? "bg-[#dcfce7] text-[#16a34a]"
       : status === "DRAFT"
-        ? "bg-[var(--bg)] text-[var(--text-muted)] border border-[var(--border)]"
-        : "bg-[var(--border)] text-[var(--text-muted)]";
+        ? "bg-[#f1f5f9] text-[#64748b] border border-[#e2e8f0]"
+        : "bg-[#e2e8f0] text-[#64748b]";
   return (
     <span
       className={`inline-block px-2 py-0.5 rounded text-[11px] font-semibold ${styles}`}
