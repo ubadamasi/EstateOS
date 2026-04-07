@@ -25,6 +25,11 @@ export async function POST(
     return NextResponse.json({ error: parsed.error.issues[0]?.message }, { status: 400 });
   }
 
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
   const passwordHash = await bcrypt.hash(parsed.data.password, 10);
   await prisma.user.update({ where: { id }, data: { passwordHash } });
 

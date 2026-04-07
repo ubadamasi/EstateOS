@@ -27,9 +27,15 @@ export default async function ResidentLayout({
   const userName = session.user.name ?? "";
   const userEmail = session.user.email ?? "";
 
+  const userRecord = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { phone: true },
+  });
+  const userPhone = userRecord?.phone ?? "";
+
   return (
     <div className="flex flex-col min-h-screen">
-      <ResidentTopBar userName={userName} userEmail={userEmail} estateName={estateName} />
+      <ResidentTopBar userName={userName} userEmail={userEmail} userPhone={userPhone} estateName={estateName} />
       <div className="flex flex-1 min-h-0">
         <ResidentSidebar />
         <main className="flex-1 min-w-0 pb-20 md:pb-0 bg-[#f1f5f9]">

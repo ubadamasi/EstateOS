@@ -5,6 +5,7 @@ interface ChairmanNavProps {
   userInitials: string;
   userName: string;
   userEmail: string;
+  userPhone?: string;
 }
 
 export function ChairmanNav({
@@ -12,6 +13,7 @@ export function ChairmanNav({
   userInitials,
   userName,
   userEmail,
+  userPhone,
 }: ChairmanNavProps) {
   return (
     <header className="sticky top-0 z-50 bg-[#0f2d5c] h-14 flex items-center justify-between px-5">
@@ -28,6 +30,7 @@ export function ChairmanNav({
         userInitials={userInitials}
         userName={userName}
         userEmail={userEmail}
+        userPhone={userPhone}
       />
     </header>
   );

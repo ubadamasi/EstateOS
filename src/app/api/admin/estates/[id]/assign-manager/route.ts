@@ -35,43 +35,35 @@ export async function POST(
 
   const { email } = parsed.data;
 
-  // Find or create user by email
-  let user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        email,
-        role: "ESTATE_MANAGER",
-      },
+  // Atomic find-or-create: avoids concurrent insert race condition
+  const user = await prisma.user.upsert({
+    where: { email },
+    update: {},
+    create: { email, role: "ESTATE_MANAGER" },
+  });
+
+  // Refuse to silently demote a platform admin
+  if (user.role === "PLATFORM_ADMIN") {
+    return NextResponse.json(
+      { error: "Cannot assign a platform admin as an estate manager" },
+      { status: 400 }
+    );
+  }
+
+  // Ensure the user has the manager role
+  if (user.role !== "ESTATE_MANAGER") {
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { role: "ESTATE_MANAGER" },
     });
-  } else {
-    // Ensure role is ESTATE_MANAGER
-    if (user.role !== "ESTATE_MANAGER") {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { role: "ESTATE_MANAGER" },
-      });
-    }
   }
 
   // Upsert EstateManager record
-  const existing = await prisma.estateManager.findUnique({
+  await prisma.estateManager.upsert({
     where: { userId: user.id },
+    update: { estateId },
+    create: { userId: user.id, estateId },
   });
-
-  if (existing) {
-    await prisma.estateManager.update({
-      where: { userId: user.id },
-      data: { estateId },
-    });
-  } else {
-    await prisma.estateManager.create({
-      data: {
-        userId: user.id,
-        estateId,
-      },
-    });
-  }
 
   return NextResponse.json({ success: true, userId: user.id });
 }

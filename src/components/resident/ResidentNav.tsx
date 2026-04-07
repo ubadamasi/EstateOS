@@ -32,10 +32,12 @@ const NAV_ITEMS = [
 export function ResidentTopBar({
   userName,
   userEmail,
+  userPhone,
   estateName,
 }: {
   userName: string;
   userEmail: string;
+  userPhone?: string;
   estateName: string;
 }) {
   const initials = userName
@@ -57,6 +59,7 @@ export function ResidentTopBar({
         userInitials={initials}
         userName={userName}
         userEmail={userEmail}
+        userPhone={userPhone}
       />
     </header>
   );

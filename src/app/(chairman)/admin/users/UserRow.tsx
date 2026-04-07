@@ -23,6 +23,7 @@ export function UserRow({ user, currentUserId }: UserRowProps) {
   const router = useRouter();
   const isSelf = user.id === currentUserId;
 
+  const [displayRole, setDisplayRole] = useState<Role>(user.role);
   const [roleLoading, setRoleLoading] = useState(false);
   const [roleError, setRoleError] = useState("");
 
@@ -45,7 +46,9 @@ export function UserRow({ user, currentUserId }: UserRowProps) {
     setRoleLoading(false);
     if (!res.ok) {
       setRoleError(data.error ?? "Failed to update role");
+      setDisplayRole(user.role); // revert to server value
     } else {
+      setDisplayRole(newRole);
       router.refresh();
     }
   }
@@ -105,7 +108,7 @@ export function UserRow({ user, currentUserId }: UserRowProps) {
         ) : (
           <div className="flex flex-col gap-1">
             <select
-              defaultValue={user.role}
+              value={displayRole}
               onChange={handleRoleChange}
               disabled={roleLoading}
               className="border border-[#e2e8f0] rounded px-2 py-1 text-[12px] font-semibold focus:outline-none focus:ring-2 focus:ring-[#0f2d5c] bg-white disabled:opacity-60"

@@ -7,11 +7,12 @@ interface Props {
   userInitials: string;
   userName: string;
   userEmail: string;
+  userPhone?: string;
 }
 
 type View = "menu" | "edit-profile" | "change-password";
 
-export function ProfileMenu({ userInitials, userName, userEmail }: Props) {
+export function ProfileMenu({ userInitials, userName, userEmail, userPhone }: Props) {
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<View>("menu");
   const ref = useRef<HTMLDivElement>(null);
@@ -61,6 +62,7 @@ export function ProfileMenu({ userInitials, userName, userEmail }: Props) {
           {view === "edit-profile" && (
             <EditProfileView
               userName={userName}
+              userPhone={userPhone}
               onBack={() => setView("menu")}
               onDone={close}
             />
@@ -150,15 +152,17 @@ function MenuView({
 
 function EditProfileView({
   userName,
+  userPhone,
   onBack,
   onDone,
 }: {
   userName: string;
+  userPhone?: string;
   onBack: () => void;
   onDone: () => void;
 }) {
   const [name, setName] = useState(userName);
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(userPhone ?? "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
