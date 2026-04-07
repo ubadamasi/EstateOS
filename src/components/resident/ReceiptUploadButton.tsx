@@ -47,7 +47,7 @@ export function ReceiptUploadButton({ paymentId }: { paymentId: string }) {
 
   if (success) {
     return (
-      <p className="text-[13px] text-[var(--green)] font-semibold">
+      <p className="text-[13px] text-[#16a34a] font-semibold">
         Receipt submitted — waiting for chairman confirmation.
       </p>
     );
@@ -65,16 +65,16 @@ export function ReceiptUploadButton({ paymentId }: { paymentId: string }) {
       />
       <label
         htmlFor={`receipt-${paymentId}`}
-        className={`inline-flex items-center gap-1.5 border border-[var(--navy)] text-[var(--navy)] text-[13px] font-semibold px-4 py-2 rounded-[var(--radius)] cursor-pointer hover:bg-[var(--navy)] hover:text-white transition-colors ${uploading ? "opacity-60 cursor-not-allowed" : ""}`}
+        className={`inline-flex items-center gap-1.5 border border-[#0f2d5c] text-[#0f2d5c] text-[13px] font-semibold px-4 py-2 rounded-lg cursor-pointer hover:bg-[#0f2d5c] hover:text-white transition-colors ${uploading ? "opacity-60 cursor-not-allowed" : ""}`}
         aria-disabled={uploading}
       >
         {uploading ? "Uploading..." : "Upload receipt"}
       </label>
-      <p className="text-[11px] text-[var(--text-muted)] mt-1">
+      <p className="text-[11px] text-[#64748b] mt-1">
         JPG, PNG, WebP or PDF · max 5 MB
       </p>
       {error && (
-        <p role="alert" className="text-[12px] text-[var(--red)] mt-1">
+        <p role="alert" className="text-[12px] text-[#dc2626] mt-1">
           {error}
         </p>
       )}

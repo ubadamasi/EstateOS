@@ -73,15 +73,15 @@ export function PaymentReviewRow({ payment }: { payment: Payment }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[12px] font-semibold text-[var(--text-muted)] bg-[var(--bg)] border border-[var(--border)] px-1.5 py-0.5 rounded">
+            <span className="text-[12px] font-semibold text-[#64748b] bg-[#f1f5f9] border border-[#e2e8f0] px-1.5 py-0.5 rounded">
               {payment.unitId}
             </span>
-            <span className="text-[13px] font-semibold text-[var(--text)]">
+            <span className="text-[13px] font-semibold text-[#0f172a]">
               {payment.residentName}
             </span>
           </div>
           <div className="flex items-center gap-3 mt-1">
-            <span className="text-[13px] font-semibold text-[var(--text)]">
+            <span className="text-[13px] font-semibold text-[#0f172a]">
               {formatNaira(payment.amountKobo)}
             </span>
             {payment.receiptFileId && (
@@ -89,13 +89,13 @@ export function PaymentReviewRow({ payment }: { payment: Payment }) {
                 href={`/api/files/${payment.receiptFileId}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[12px] text-[var(--navy)] hover:underline"
+                className="text-[12px] text-[#0f2d5c] hover:underline"
               >
                 View receipt
               </a>
             )}
             {payment.receiptUploadedAt && (
-              <span className="text-[11px] text-[var(--text-muted)]">
+              <span className="text-[11px] text-[#64748b]">
                 Uploaded{" "}
                 {new Date(payment.receiptUploadedAt).toLocaleDateString(
                   "en-NG",
@@ -112,14 +112,14 @@ export function PaymentReviewRow({ payment }: { payment: Payment }) {
               <button
                 onClick={confirm}
                 disabled={loading !== null}
-                className="bg-[var(--green)] text-white text-[12px] font-semibold px-3 py-1.5 rounded-[var(--radius)] hover:bg-[#15803d] transition-colors disabled:opacity-60"
+                className="bg-[#16a34a] text-white text-[12px] font-semibold px-3 py-1.5 rounded-lg hover:bg-[#15803d] transition-colors disabled:opacity-60"
               >
                 {loading === "confirm" ? "..." : "Confirm"}
               </button>
               <button
                 onClick={() => setShowRejectInput(true)}
                 disabled={loading !== null}
-                className="border border-[var(--border)] text-[var(--text-muted)] text-[12px] font-semibold px-3 py-1.5 rounded-[var(--radius)] hover:bg-[var(--bg)] transition-colors disabled:opacity-60"
+                className="border border-[#e2e8f0] text-[#64748b] text-[12px] font-semibold px-3 py-1.5 rounded-lg hover:bg-[#f1f5f9] transition-colors disabled:opacity-60"
               >
                 Reject
               </button>
@@ -136,13 +136,13 @@ export function PaymentReviewRow({ payment }: { payment: Payment }) {
             onChange={(e) => setRejectNote(e.target.value)}
             placeholder="Rejection reason (e.g. blurry image)"
             maxLength={500}
-            className="flex-1 border border-[var(--border)] rounded-[var(--radius)] px-3 py-1.5 text-[13px] focus:outline-none focus:ring-2 focus:ring-[var(--navy)] bg-[var(--bg)]"
+            className="flex-1 border border-[#e2e8f0] rounded-lg px-3 py-1.5 text-[13px] focus:outline-none focus:ring-2 focus:ring-[#0f2d5c] bg-[#f1f5f9]"
             autoFocus
           />
           <button
             onClick={reject}
             disabled={loading !== null}
-            className="bg-[var(--red)] text-white text-[12px] font-semibold px-3 py-1.5 rounded-[var(--radius)] hover:bg-[#b91c1c] transition-colors disabled:opacity-60 whitespace-nowrap"
+            className="bg-[#dc2626] text-white text-[12px] font-semibold px-3 py-1.5 rounded-lg hover:bg-[#b91c1c] transition-colors disabled:opacity-60 whitespace-nowrap"
           >
             {loading === "reject" ? "..." : "Reject"}
           </button>
@@ -152,7 +152,7 @@ export function PaymentReviewRow({ payment }: { payment: Payment }) {
               setRejectNote("");
               setError("");
             }}
-            className="text-[12px] text-[var(--text-muted)] hover:text-[var(--text)] px-2 py-1.5"
+            className="text-[12px] text-[#64748b] hover:text-[#0f172a] px-2 py-1.5"
           >
             Cancel
           </button>
@@ -160,7 +160,7 @@ export function PaymentReviewRow({ payment }: { payment: Payment }) {
       )}
 
       {error && (
-        <p className="text-[12px] text-[var(--red)] mt-1.5">{error}</p>
+        <p className="text-[12px] text-[#dc2626] mt-1.5">{error}</p>
       )}
     </div>
   );

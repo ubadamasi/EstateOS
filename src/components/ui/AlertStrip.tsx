@@ -1,3 +1,5 @@
+"use client";
+
 interface AlertStripProps {
   pendingReviews: number;
   openDisputes: number;
@@ -16,7 +18,7 @@ export function AlertStrip({
   return (
     <div
       role="alert"
-      className="bg-[var(--amber-light)] border-b border-[var(--amber)] px-[var(--page-padding)] py-2 flex flex-wrap gap-x-4 gap-y-1 text-[12px] font-semibold text-[var(--amber)]"
+      className="bg-[#fef3c7] border-b border-[#d97706] px-5 py-2 flex flex-wrap gap-x-4 gap-y-1 text-[12px] font-semibold text-[#d97706]"
     >
       {pendingReviews > 0 && (
         <button
@@ -30,7 +32,7 @@ export function AlertStrip({
       {openDisputes > 0 && (
         <button
           onClick={onClickDisputes}
-          className="hover:underline min-h-[44px] flex items-center text-[var(--red)]"
+          className="hover:underline min-h-[44px] flex items-center text-[#dc2626]"
         >
           {openDisputes} open dispute{openDisputes > 1 ? "s" : ""}
         </button>

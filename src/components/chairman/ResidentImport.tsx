@@ -51,7 +51,7 @@ export function ResidentImport() {
   }
 
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[var(--radius)] p-4 shadow-[var(--shadow)]">
+    <div className="bg-[#ffffff] border border-[#e2e8f0] rounded-lg p-4 shadow-sm">
       <input
         ref={inputRef}
         type="file"
@@ -62,14 +62,14 @@ export function ResidentImport() {
       />
       <label
         htmlFor="resident-csv"
-        className={`inline-flex items-center gap-1.5 border border-[var(--navy)] text-[var(--navy)] text-[13px] font-semibold px-4 py-2 rounded-[var(--radius)] cursor-pointer hover:bg-[var(--navy)] hover:text-white transition-colors ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
+        className={`inline-flex items-center gap-1.5 border border-[#0f2d5c] text-[#0f2d5c] text-[13px] font-semibold px-4 py-2 rounded-lg cursor-pointer hover:bg-[#0f2d5c] hover:text-white transition-colors ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
         aria-disabled={loading}
       >
         {loading ? "Importing..." : "Choose CSV file"}
       </label>
 
       {error && (
-        <p className="mt-3 text-[13px] text-[var(--red)] bg-[var(--red-light)] px-3 py-2 rounded">
+        <p className="mt-3 text-[13px] text-[#dc2626] bg-[#fee2e2] px-3 py-2 rounded">
           {error}
         </p>
       )}
@@ -77,22 +77,22 @@ export function ResidentImport() {
       {result && (
         <div className="mt-4 space-y-2">
           <div className="flex items-center gap-4 text-[13px]">
-            <span className="text-[var(--green)] font-semibold">
+            <span className="text-[#16a34a] font-semibold">
               {result.imported} imported
             </span>
             {result.skipped > 0 && (
-              <span className="text-[var(--red)] font-semibold">
+              <span className="text-[#dc2626] font-semibold">
                 {result.skipped} skipped
               </span>
             )}
           </div>
           {result.errors.length > 0 && (
-            <div className="bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius)] p-3 max-h-[160px] overflow-y-auto">
-              <p className="text-[11px] font-semibold text-[var(--text-muted)] mb-2">
+            <div className="bg-[#f1f5f9] border border-[#e2e8f0] rounded-lg p-3 max-h-[160px] overflow-y-auto">
+              <p className="text-[11px] font-semibold text-[#64748b] mb-2">
                 Row errors:
               </p>
               {result.errors.map((e) => (
-                <div key={e.row} className="text-[12px] text-[var(--red)]">
+                <div key={e.row} className="text-[12px] text-[#dc2626]">
                   Row {e.row}: {e.reason}
                 </div>
               ))}

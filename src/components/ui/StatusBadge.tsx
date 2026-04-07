@@ -1,4 +1,4 @@
-import { PaymentStatus } from "@/generated/prisma";
+import { PaymentStatus } from "@/generated/prisma/enums";
 
 const config: Record<
   PaymentStatus | "overdue",
@@ -6,19 +6,19 @@ const config: Record<
 > = {
   PAID: {
     label: "Paid",
-    className: "bg-[var(--green-light)] text-[var(--green)]",
+    className: "bg-[#dcfce7] text-[#16a34a]",
   },
   UNPAID: {
     label: "Unpaid",
-    className: "bg-[var(--red-light)] text-[var(--red)]",
+    className: "bg-[#fee2e2] text-[#dc2626]",
   },
   PENDING_REVIEW: {
     label: "Pending review",
-    className: "bg-[var(--amber-light)] text-[var(--amber)]",
+    className: "bg-[#fef3c7] text-[#d97706]",
   },
   DISPUTED: {
     label: "Disputed",
-    className: "bg-[var(--purple-light)] text-[var(--purple)]",
+    className: "bg-[#ede9fe] text-[#7c3aed]",
   },
   overdue: {
     label: "Overdue",

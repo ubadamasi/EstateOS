@@ -1,7 +1,8 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
-import { ResidentNav } from "@/components/resident/ResidentNav";
+import { prisma } from "@/lib/prisma";
+import { ResidentTopBar, ResidentSidebar, ResidentBottomTabs } from "@/components/resident/ResidentNav";
 
 export default async function ResidentLayout({
   children,
@@ -13,10 +14,29 @@ export default async function ResidentLayout({
   if (!session?.user) redirect("/login");
   if (session.user.role !== "RESIDENT") redirect("/dashboard");
 
+  // Fetch estate name for the top bar
+  let estateName = "EstateOS";
+  if (session.user.estateId) {
+    const estate = await prisma.estate.findUnique({
+      where: { id: session.user.estateId },
+      select: { name: true },
+    });
+    estateName = estate?.name ?? "EstateOS";
+  }
+
+  const userName = session.user.name ?? "";
+  const userEmail = session.user.email ?? "";
+
   return (
-    <div className="min-h-screen bg-[var(--bg)] pb-20 md:pb-0">
-      <ResidentNav />
-      <main>{children}</main>
+    <div className="flex flex-col min-h-screen">
+      <ResidentTopBar userName={userName} userEmail={userEmail} estateName={estateName} />
+      <div className="flex flex-1 min-h-0">
+        <ResidentSidebar />
+        <main className="flex-1 min-w-0 pb-20 md:pb-0 bg-[#f1f5f9]">
+          {children}
+        </main>
+      </div>
+      <ResidentBottomTabs />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { ExpenseCategory } from "@/generated/prisma";
+import { ExpenseCategory } from "@/generated/prisma/enums";
 
 const colors: Record<ExpenseCategory, string> = {
   SECURITY: "#3b82f6",
@@ -30,7 +30,7 @@ export function CategoryDot({ category, showLabel = true }: CategoryDotProps) {
         aria-hidden="true"
       />
       {showLabel && (
-        <span className="text-[13px] text-[var(--text)]">{labels[category]}</span>
+        <span className="text-[13px] text-[#0f172a]">{labels[category]}</span>
       )}
     </span>
   );

@@ -65,7 +65,7 @@ export function LevyActions({ levyId, status }: Props) {
         <button
           onClick={activate}
           disabled={loading}
-          className="bg-[var(--green)] text-white text-[13px] font-semibold px-4 py-2 rounded-[var(--radius)] hover:bg-[#15803d] transition-colors disabled:opacity-60 whitespace-nowrap"
+          className="bg-[#16a34a] text-white text-[13px] font-semibold px-4 py-2 rounded-lg hover:bg-[#15803d] transition-colors disabled:opacity-60 whitespace-nowrap"
         >
           {loading ? "Activating..." : "Activate levy"}
         </button>
@@ -74,13 +74,13 @@ export function LevyActions({ levyId, status }: Props) {
         <button
           onClick={close}
           disabled={loading}
-          className="border border-[var(--border)] text-[var(--text-muted)] text-[13px] font-semibold px-4 py-2 rounded-[var(--radius)] hover:bg-[var(--bg)] transition-colors disabled:opacity-60 whitespace-nowrap"
+          className="border border-[#e2e8f0] text-[#64748b] text-[13px] font-semibold px-4 py-2 rounded-lg hover:bg-[#f1f5f9] transition-colors disabled:opacity-60 whitespace-nowrap"
         >
           {loading ? "Closing..." : "Close levy"}
         </button>
       )}
       {error && (
-        <p className="text-[12px] text-[var(--red)] max-w-[200px] text-right">
+        <p className="text-[12px] text-[#dc2626] max-w-[200px] text-right">
           {error}
         </p>
       )}
