@@ -12,7 +12,24 @@
       "Bash(npx prisma:*)",
       "Bash(bunx tsc:*)",
       "Bash(bunx vitest:*)",
-      "Skill(qa)"
+      "Skill(qa)",
+      "Bash(openssl rand:*)",
+      "Bash(vercel --yes --env DATABASE_URL=\"postgresql://neondb_owner:npg_Cua2ifWg9wcb@ep-ancient-block-ab3b6oir-pooler.eu-west-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require\" --env NEXTAUTH_SECRET=\"6xnrVxvkMXOZ3PJGV+Y7w+tj7tpCTcPC1LjIL62CAtY=\" --env NEXTAUTH_URL=\"https://estate-os.vercel.app\")",
+      "Bash(vercel logs:*)",
+      "Bash(vercel inspect:*)",
+      "Bash(vercel env:*)",
+      "Bash(vercel --yes --prod)",
+      "Bash(vercel deploy:*)",
+      "Bash(vercel build:*)",
+      "Bash(vercel pull:*)",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_Cua2ifWg9wcb@ep-ancient-block-ab3b6oir-pooler.eu-west-2.aws.neon.tech/neondb?channel_binding=require&sslmode=require\" ADMIN_EMAIL=\"ubadamasi@gmail.com\" ADMIN_PASSWORD=\"SLqJfOVgDbHHlk7YFVeYTA==\" npx tsx scripts/seed-prod-admin.ts)",
+      "Bash(vercel alias:*)",
+      "Bash(cat:*)",
+      "Bash(cat /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(resident\\\\\\)/home/page.tsx)",
+      "Bash(cat /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(resident\\\\\\)/my-levies/page.tsx)",
+      "Bash(ls:*)",
+      "Bash(ls /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(chairman\\\\\\)/expenses/)",
+      "Bash(ls /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(chairman\\\\\\)/admin/)"
     ]
   }
 }
