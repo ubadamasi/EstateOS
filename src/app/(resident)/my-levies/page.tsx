@@ -165,7 +165,7 @@ function PaymentCard({
               status={
                 isOverdue
                   ? "overdue"
-                  : (payment.status as import("@/generated/prisma").PaymentStatus)
+                  : (payment.status as import("@/generated/prisma/enums").PaymentStatus)
               }
             />
           </div>
