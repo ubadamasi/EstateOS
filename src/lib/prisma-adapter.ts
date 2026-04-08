@@ -24,7 +24,8 @@ export function CustomPrismaAdapter(): Adapter {
     deleteUser: (id) => prisma.user.delete({ where: { id } }),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     linkAccount: (data: any) => prisma.account.create({ data }) as never,
-    unlinkAccount: (provider_providerAccountId) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    unlinkAccount: (provider_providerAccountId: any) =>
       prisma.account.delete({ where: { provider_providerAccountId } }) as never,
     async getSessionAndUser(sessionToken) {
       const result = await prisma.session.findUnique({
