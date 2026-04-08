@@ -1,0 +1,6 @@
+{
+  "buildCommand": "prisma migrate deploy && npm run build",
+  "env": {
+    "NEXTAUTH_URL": "https://your-app.vercel.app"
+  }
+}
