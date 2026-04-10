@@ -29,7 +29,9 @@
       "Bash(cat /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(resident\\\\\\)/my-levies/page.tsx)",
       "Bash(ls:*)",
       "Bash(ls /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(chairman\\\\\\)/expenses/)",
-      "Bash(ls /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(chairman\\\\\\)/admin/)"
+      "Bash(ls /Users/ubadamasi/documents/project/2026/dan/src/app/\\\\\\(chairman\\\\\\)/admin/)",
+      "Bash(vercel --version)",
+      "Bash(vercel --prod)"
     ]
   }
 }
