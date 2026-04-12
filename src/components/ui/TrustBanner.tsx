@@ -9,7 +9,7 @@ interface TrustBannerProps {
 
 export function TrustBanner({
   publicToken,
-  appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "",
+  appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? "").trim(),
 }: TrustBannerProps) {
   const publicUrl = `${appUrl}/public/${publicToken}`;
   const [copied, setCopied] = useState(false);
